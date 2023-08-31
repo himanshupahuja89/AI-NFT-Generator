@@ -1,10 +1,27 @@
 import { ethers } from 'ethers';
 import { DarkModeSwitch } from 'react-toggle-dark-mode';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { useNFTDataContext } from '../context/NFTDataContext';
 
 
-const Navigation = ({ account, setAccount, isDarkMode, toggleDarkMode }) => {
+const Navigation = () => {
+    const navigate = useNavigate();
 
+    const {
+        isDarkMode,
+        setIsDarkMode,
+        account,
+        setAccount
+    } = useNFTDataContext();
+
+    const toggleDarkMode = () => {
+        setIsDarkMode(prevMode => !prevMode);
+    };
+
+    const handleViewNFT = () => {
+        navigate('/view');
+    };
 
 
     const connectHandler = async () => {
@@ -26,10 +43,9 @@ const Navigation = ({ account, setAccount, isDarkMode, toggleDarkMode }) => {
 
     return (
         <nav>
-            <div className='nav__brand'>
+            <div className='nav__brand' onClick={() => navigate('/')}>
                 <h1>AI NFT Generator</h1>
             </div>
-
 
             <div className='toggle-container'>
 
@@ -40,6 +56,15 @@ const Navigation = ({ account, setAccount, isDarkMode, toggleDarkMode }) => {
                     sunColor={"#6C63FF"}
                 />
 
+            </div>
+            <div >
+                <button
+                    type="button"
+                    className='nav__connect'
+                    onClick={handleViewNFT}
+                >
+                    View NFT
+                </button>
             </div>
 
             <div>

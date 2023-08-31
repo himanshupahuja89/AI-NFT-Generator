@@ -11,6 +11,8 @@ contract NFT is ERC721URIStorage {
 
     address public owner;
     uint256 public cost;
+    mapping(address => uint256[]) public userToTokenIds;
+    mapping(uint256 => string) public tokenIdToIpfsHash; // Mapping for token ID to URI
 
     constructor(
         string memory _name,
@@ -29,6 +31,15 @@ contract NFT is ERC721URIStorage {
         uint256 newItemId = _tokenIds.current();
         _mint(msg.sender, newItemId);
         _setTokenURI(newItemId, tokenURI);
+        tokenIdToIpfsHash[newItemId] = tokenURI; // Store IPFS hash
+        userToTokenIds[msg.sender].push(newItemId);
+    }
+    function getUserTokenIds(address user) public view returns (uint256[] memory) {
+        return userToTokenIds[user];
+    }
+
+    function getTokenURI(uint256 tokenId) public view returns (string memory) {
+        return tokenIdToIpfsHash[tokenId];
     }
 
     function totalSupply() public view returns (uint256) {
